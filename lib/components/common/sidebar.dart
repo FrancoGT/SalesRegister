@@ -11,7 +11,7 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: const Color(0xFF7CB342), // Actualizado al color del login
+        color: const Color(0xFF81C784),
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -32,7 +32,7 @@ class Sidebar extends StatelessWidget {
   Widget _buildDrawerHeader() {
     return const DrawerHeader(
       decoration: BoxDecoration(
-        color: Color(0xFF7CB342), // Actualizado al color del login
+        color: Color(0xFF81C784), // Actualizado al color del login
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

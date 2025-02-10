@@ -114,9 +114,25 @@ class _EditProductPageState extends State<EditProductPage> {
                 decoration: const InputDecoration(labelText: 'Estado'),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _updateProduct(context),
-                child: const Text('Actualizar Producto'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _updateProduct(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF81C784), // Verde pastel
+                    ),
+                    child: const Text('Guardar Cambios', style: TextStyle(color: Colors.white)),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFE57373), // Rojo suave
+                    ),
+                    child: const Text('Cancelar', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
               ),
             ],
           ),

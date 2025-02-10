@@ -92,11 +92,25 @@ class _CreateProductPageState extends State<CreateProductPage> {
                 decoration: const InputDecoration(labelText: 'Estado'),
               ),
               const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () => _createProduct(context),
-                  child: const Text('Crear Producto'),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _createProduct(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF81C784), // Verde pastel
+                    ),
+                    child: const Text('Guardar', style: TextStyle(color: Colors.white)),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFE57373), // Rojo suave
+                    ),
+                    child: const Text('Cancelar', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
               ),
             ],
           ),

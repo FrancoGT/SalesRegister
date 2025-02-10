@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     final String password = _passwordController.text.trim();
 
     final DatabaseHelper dbHelper = DatabaseHelper();
-    final User? user = await dbHelper.getUser(username, password);
+    final User? user = await User.getUser(await dbHelper.database, username, password);
 
     if (user != null) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF7CB342), Color(0xFF7CB342)], // Single green color to match image
+            colors: [Color(0xFF81C784), Color(0xFF81C784)], // Single green color to match image
           ),
         ),
         child: SafeArea(
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: _login,
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: const Color(0xFF7CB342),
+                      foregroundColor: const Color(0xFF81C784),
                       backgroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF7CB342),
+                        color: Color(0xFF81C784),
                       ),
                     ),
                   ),
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
       style: const TextStyle(color: Colors.white),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter your ${label.toLowerCase()}';
+          return 'Por favor ingresa tu ${label.toLowerCase()}';
         }
         return null;
       },

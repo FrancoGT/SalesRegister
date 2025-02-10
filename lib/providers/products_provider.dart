@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:salesresgistrator/database/databasehelper.dart';
 import 'package:salesresgistrator/models/product.dart';
 
 class ProductsProvider extends ChangeNotifier {
@@ -13,38 +12,34 @@ class ProductsProvider extends ChangeNotifier {
     loadProducts();
   }
 
+  // Cargar los productos desde la base de datos
   Future<void> loadProducts() async {
     _isLoading = true;
     notifyListeners();
 
-    _products = await DatabaseHelper().getProducts();
+    final db = await Product.getDatabase(); // Obtenemos la base de datos
+    _products = await Product.getProducts(db); // Usamos el método estático para obtener productos
     _isLoading = false;
     notifyListeners();
   }
 
+  // Añadir un nuevo producto
   Future<void> addProduct(Product product) async {
-    await DatabaseHelper().insertProduct(product);
-    loadProducts();
+    final db = await Product.getDatabase(); // Obtenemos la base de datos
+    await Product.insertProduct(db, product); // Usamos el método estático de Product
+    loadProducts(); // Recargar la lista de productos
   }
 
+  // Obtener un producto por su ID
   Future<Product> getProductById(int productId) async {
-    final db = await DatabaseHelper().database;
-
-    final maps = await db.query(
-      'products',
-      where: 'id = ?',
-      whereArgs: [productId],
-    );
-
-    if (maps.isNotEmpty) {
-      return Product.fromMap(maps.first);
-    } else {
-      throw Exception('Producto no encontrado');
-    }
+    final db = await Product.getDatabase(); // Obtenemos la base de datos
+    return await Product.getProductById(db, productId); // Usamos el método estático de Product
   }
 
+  // Actualizar un producto
   Future<void> updateProduct(Product product) async {
-    await DatabaseHelper().updateProduct(product);
-    loadProducts();
+    final db = await Product.getDatabase(); // Obtenemos la base de datos
+    await Product.updateProduct(db, product); // Usamos el método estático de Product
+    loadProducts(); // Recargar la lista de productos
   }
 }

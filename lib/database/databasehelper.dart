@@ -30,7 +30,7 @@ class DatabaseHelper {
 
   // Crear las tablas
   void _onCreate(Database db, int version) async {
-    await db.execute('''
+    await db.execute(''' 
       CREATE TABLE users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT,
@@ -39,7 +39,7 @@ class DatabaseHelper {
       )
     ''');
 
-    await db.execute('''
+    await db.execute(''' 
       CREATE TABLE products(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
@@ -48,7 +48,7 @@ class DatabaseHelper {
       )
     ''');
 
-    await db.execute('''
+    await db.execute(''' 
       CREATE TABLE sellers(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
@@ -56,7 +56,7 @@ class DatabaseHelper {
       )
     ''');
 
-    await db.execute('''
+    await db.execute(''' 
       CREATE TABLE sales(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
@@ -72,103 +72,7 @@ class DatabaseHelper {
     ''');
 
     // Insertar usuario "SuperAdmin" con contraseña encriptada y nombre
-    String hashedPassword = User.hashPassword("admin");
-    await db.insert('users', {'username': 'admin', 'password': hashedPassword, 'name': 'SuperAdmin'});
-  }
-
-  // Funciones para insertar, obtener, actualizar y eliminar datos
-  Future<int> insertUser(User user) async {
-    final db = await database;
-    return await db.insert('users', user.toMap());
-  }
-
-  Future<User?> getUser(String username, String password) async {
-    final db = await database;
-    String hashedPassword = User.hashPassword(password);
-    final List<Map<String, dynamic>> maps = await db.query(
-      'users',
-      where: 'username = ? AND password = ?',
-      whereArgs: [username, hashedPassword],
-    );
-
-    if (maps.isNotEmpty) {
-      return User.fromMap(maps.first);
-    }
-    return null;
-  }
-
-  Future<List<User>> getUsers() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('users');
-    return List.generate(maps.length, (i) {
-      return User.fromMap(maps[i]);
-    });
-  }
-
-
-
-
-  Future<int> insertProduct(Product product) async {
-    final db = await database;
-    return await db.insert('products', product.toMap());
-  }
-
-  Future<void> updateProduct(Product product) async {
-    final db = await database;
-    await db.update(
-      'products',
-      product.toMap(),
-      where: 'id = ?',
-      whereArgs: [product.id],
-    );
-  }
-
-  Future<Product> getProductById(int productId) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'products',
-      where: 'id = ?',
-      whereArgs: [productId],
-    );
-
-    if (maps.isNotEmpty) {
-      return Product.fromMap(maps.first);
-    } else {
-      throw Exception('Producto no encontrado');
-    }
-  }
-
-  Future<List<Product>> getProducts() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('products');
-    return List.generate(maps.length, (i) {
-      return Product.fromMap(maps[i]);
-    });
-  }
-
-  Future<int> insertSeller(Seller seller) async {
-    final db = await database;
-    return await db.insert('sellers', seller.toMap());
-  }
-
-  Future<List<Seller>> getSellers() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('sellers');
-    return List.generate(maps.length, (i) {
-      return Seller.fromMap(maps[i]);
-    });
-  }
-
-  Future<int> insertSale(Sale sale) async {
-    final db = await database;
-    return await db.insert('sales', sale.toMap());
-  }
-
-  Future<List<Sale>> getSales() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('sales');
-    return List.generate(maps.length, (i) {
-      return Sale.fromMap(maps[i]);
-    });
+    User superAdmin = User(username: 'admin', password: 'admin', name: 'SuperAdmin');
+    await User.createUser(db, superAdmin);
   }
 }

@@ -58,7 +58,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7CB342), // Color de fondo
+                    backgroundColor: const Color(0xFF81C784), // Color de fondo
                     foregroundColor: Colors.white, // Color del texto
                   ),
                   child: const Text('Crear Producto'),
