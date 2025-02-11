@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salesresgistrator/providers/products_provider.dart';
 import 'package:salesresgistrator/components/common/sidebar.dart';
-import 'package:salesresgistrator/components/common/searchable_datatable.dart';
 import 'package:salesresgistrator/components/products/create_product_page.dart';
 import 'package:salesresgistrator/components/products/edit_product_page.dart';
+import 'package:salesresgistrator/components/common/searchable_datatable.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -33,6 +33,33 @@ class _ProductsPageState extends State<ProductsPage> {
     }
   }
 
+  void _deleteProduct(int productId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar eliminación'),
+          content: const Text('¿Estás seguro de que deseas eliminar este producto?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await Provider.of<ProductsProvider>(context, listen: false).deleteProduct(productId);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Eliminar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +85,8 @@ class _ProductsPageState extends State<ProductsPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF81C784), // Color de fondo
-                    foregroundColor: Colors.white, // Color del texto
+                    backgroundColor: const Color(0xFF81C784),
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text('Crear Producto'),
                 ),
@@ -69,16 +96,15 @@ class _ProductsPageState extends State<ProductsPage> {
                   columns: const ['Nombre', 'Precio', 'Estado', 'Acciones'],
                   data: provider.products.map((product) {
                     return {
-                      'id': product.id, // Incluimos el id en los datos
+                      'id': product.id,
                       'Nombre': product.name,
                       'Precio': product.price,
-                      'Estado': product.status,
-                      'Acciones': '', // Esta columna será solo para el botón de editar
+                      'Estado': product.status == 'Active' ? 'Activo' : 'Inactivo',
+                      'Acciones': '', // Esta columna no requiere datos, los botones se agregan desde el código
                     };
                   }).toList(),
-                  onEdit: (productId) {
-                    _editProduct(productId); // Llamamos a la función de edición
-                  },
+                  onEdit: _editProduct,
+                  onDelete: _deleteProduct, // Función de eliminación
                 ),
               ],
             );

@@ -12,20 +12,17 @@ class Product {
 
   // Método estático para obtener la base de datos
   static Future<Database> getDatabase() async {
-    // Abre o crea la base de datos
     String path = join(await getDatabasesPath(), 'app_database.db');
     return openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE products(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            price REAL,
-            status TEXT
-          )
-        ''');
+        await db.execute('''CREATE TABLE products(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          price REAL,
+          status TEXT
+        )''');
       },
     );
   }
@@ -64,6 +61,15 @@ class Product {
       product.toMap(),
       where: 'id = ?',
       whereArgs: [product.id],
+    );
+  }
+
+  // Método para eliminar un producto
+  static Future<void> deleteProduct(Database db, int id) async {
+    await db.delete(
+      'products',
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 
