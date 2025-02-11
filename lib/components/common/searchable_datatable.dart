@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class SearchableDataTable extends StatefulWidget {
   final List<String> columns;
   final List<Map<String, dynamic>> data;
-  final Function(int productId) onEdit;
+  final Function(int itemId)? onEdit; // Acción opcional de edición
+  final Function(int itemId)? onDelete; // Acción opcional de eliminación
 
   const SearchableDataTable({
     Key? key,
     required this.columns,
     required this.data,
-    required this.onEdit,
+    this.onEdit,
+    this.onDelete, // Acción opcional de eliminación
   }) : super(key: key);
 
   @override
@@ -79,12 +81,28 @@ class _SearchableDataTableState extends State<SearchableDataTable> {
                 cells: widget.columns.map((column) {
                   if (column == 'Acciones') {
                     return DataCell(
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () {
-                          int productId = row['id']; // Usamos el id del producto
-                          widget.onEdit(productId); // Abrimos el editor
-                        },
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Acción de edición, si se proporciona
+                          if (widget.onEdit != null)
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                int itemId = row['id']; // Usamos el id del registro
+                                widget.onEdit!(itemId); // Llamamos a la acción de edición
+                              },
+                            ),
+                          // Acción de eliminación, si se proporciona
+                          if (widget.onDelete != null)
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                int itemId = row['id']; // Usamos el id del registro
+                                widget.onDelete!(itemId); // Llamamos a la acción de eliminación
+                              },
+                            ),
+                        ],
                       ),
                     );
                   }

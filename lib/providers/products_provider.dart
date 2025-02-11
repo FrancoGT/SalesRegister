@@ -42,4 +42,11 @@ class ProductsProvider extends ChangeNotifier {
     await Product.updateProduct(db, product); // Usamos el método estático de Product
     loadProducts(); // Recargar la lista de productos
   }
+
+  // Eliminar un producto
+  Future<void> deleteProduct(int productId) async {
+    final db = await Product.getDatabase(); // Obtenemos la base de datos
+    await Product.deleteProduct(db, productId); // Usamos el método estático de Product
+    loadProducts(); // Recargar la lista de productos
+  }
 }
