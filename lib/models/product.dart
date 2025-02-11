@@ -86,4 +86,15 @@ class Product {
       status: map['status'],
     );
   }
+
+  // Método para obtener productos activos con id y nombre
+  static Future<List<Map<String, dynamic>>> getActiveProducts(Database db) async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      'products',
+      columns: ['id', 'name'],
+      where: 'status = ?',
+      whereArgs: ['Active'],
+    );
+    return maps;
+  }
 }
