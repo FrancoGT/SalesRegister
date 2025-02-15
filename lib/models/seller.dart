@@ -92,4 +92,16 @@ class Seller
       status: map['status'],
     );
   }
+
+  // Método para obtener vendedores activos con id y nombre
+  static Future<List<Map<String, dynamic>>> getActiveSellers(Database db) async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      'sellers',
+      columns: ['id', 'name'],
+      where: 'status = ?',
+      whereArgs: ['Active'],
+    );
+    return maps;
+  }
+
 }

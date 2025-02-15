@@ -2,24 +2,24 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/user.dart';
-import '../models/product.dart';
-import '../models/seller.dart';
-import '../models/sale.dart';
 
-class DatabaseHelper {
+class DatabaseHelper
+{
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
   static Database? _database;
 
   DatabaseHelper._internal();
 
-  Future<Database> get database async {
+  Future<Database> get database async
+  {
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
   }
 
-  Future<Database> _initDatabase() async {
+  Future<Database> _initDatabase() async
+  {
     String path = join(await getDatabasesPath(), 'app_database.db');
     return await openDatabase(
       path,
@@ -29,7 +29,8 @@ class DatabaseHelper {
   }
 
   // Crear las tablas
-  void _onCreate(Database db, int version) async {
+  void _onCreate(Database db, int version) async
+  {
     await db.execute(''' 
       CREATE TABLE users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,9 +64,7 @@ class DatabaseHelper {
         seller_id INTEGER,
         quantity INTEGER,
         product_id INTEGER,
-        subtotal REAL,
         payment_method TEXT,
-        status TEXT,
         FOREIGN KEY(seller_id) REFERENCES sellers(id),
         FOREIGN KEY(product_id) REFERENCES products(id)
       )

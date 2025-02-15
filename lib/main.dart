@@ -10,6 +10,8 @@ import 'components/sales/sales_page.dart';
 import 'components/complementaries/profile_page.dart';
 import 'providers/products_provider.dart';
 import 'providers/sellers_provider.dart';
+import 'providers/sales_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   // Aseguramos la inicialización completa antes de usar SharedPreferences
@@ -29,28 +31,38 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ProductsProvider(), // Proveemos el ProductsProvider
-      child: ChangeNotifierProvider(
-        create: (context) => SellersProvider(), // Agregamos el SellersProvider
-        child: MaterialApp(
-          title: 'SalesRegistrator',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            useMaterial3: true,
-          ),
-          // Usamos la propiedad home para manejar la navegación de la primera página.
-          home: isLoggedIn ? const WelcomePage() : const LoginPage(),
-          // Aquí no definimos la ruta "/" ya que la estamos manejando con "home".
-          routes: {
-            '/welcome': (context) => const WelcomePage(),
-            '/products': (context) => const ProductsPage(),
-            '/createProduct': (context) => const CreateProductPage(),
-            '/sellers': (context) => const SellersPage(),
-            '/sales': (context) => const SalesPage(),
-            '/profile': (context) => const ProfilePage(),
-          },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProductsProvider()),
+        ChangeNotifierProvider(create: (context) => SellersProvider()),
+        ChangeNotifierProvider(create: (context) => SalesProvider()),
+      ],
+      child: MaterialApp(
+        title: 'SalesRegistrator',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          useMaterial3: true,
         ),
+        // Agregamos el soporte para localizaciones
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', 'US'), // Idioma predeterminado
+          const Locale('es', 'ES'), // Idioma español (si lo necesitas)
+        ],
+        // Usamos la propiedad home para manejar la navegación de la primera página.
+        home: isLoggedIn ? const WelcomePage() : const LoginPage(),
+        routes: {
+          '/welcome': (context) => const WelcomePage(),
+          '/products': (context) => const ProductsPage(),
+          '/createProduct': (context) => const CreateProductPage(),
+          '/sellers': (context) => const SellersPage(),
+          '/sales': (context) => const SalesPage(),
+          '/profile': (context) => const ProfilePage(),
+        },
       ),
     );
   }
